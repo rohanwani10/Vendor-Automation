@@ -15,6 +15,11 @@ public class VendorService {
 
     public ResponseEntity<String> addVendor(Vendor vendorData) {
         Vendor save = vendorRepository.save(vendorData);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Vendor added with the email: " + save.getRequestorEmail());
+        String jsonResponse = String.format(
+                "{\"message\": \"Vendor added with the email\", \"emailId\": \"%s\"}",
+                save.getRequestorEmail()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(jsonResponse);
     }
 }
+
