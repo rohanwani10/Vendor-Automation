@@ -3,10 +3,15 @@ package com.eco_lab.eco_lab.Service;
 import com.eco_lab.eco_lab.Entity.User;
 import com.eco_lab.eco_lab.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -22,6 +27,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
 
-        return org.springframework.security.core.userdetails.User.builder().username(user.getUsername()).password(user.getPassword()).authorities("USER").build();
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .collect(Collectors.toList());
+
+        return org.springframework.security.core.userdetails.User.builder().username(user.getUsername()).password(user.getPassword()).authorities(authorities).build();
     }
 }

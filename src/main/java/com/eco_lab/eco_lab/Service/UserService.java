@@ -30,6 +30,9 @@ public class UserService {
         if (user.getEmail() == null || user.getPassword() == null || user.getUsername() == null)
             return ResponseEntity.status(400).body("Invalid User");
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+
+        user.getRoles().add(user.getRoles().toString());
+
         User resp = userRepository.save(user);
         String s = "{\"message\":\"" + resp.getId() + "\"}";
         return ResponseEntity.status(200).body(s);
@@ -41,7 +44,7 @@ public class UserService {
         try {
             authenticationManager.authenticate((new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())));
             User userByName = userRepository.findByUsername(user.getUsername());
-            String s = jwt.generateJwtToken(userByName.getUsername());
+            String s = jwt.generateJwtToken(userByName.getUsername(),userByName.getRoles());
 
             String jwt = "{\"token\":\"" + s + "\"}";
 

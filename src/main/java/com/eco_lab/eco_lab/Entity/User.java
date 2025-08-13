@@ -28,6 +28,14 @@ public class User {
     private String password;
     private String fullName;
 
+    @DBRef
+    private Vendor vendor;
+
+    @DBRef
+    private Vendor_Document vendorDocument;
+
+    private List<String> roles = new LinkedList<String>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

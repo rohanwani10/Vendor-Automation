@@ -35,11 +35,12 @@ public class DocumentService {
         document.setFilename(file.getOriginalFilename());
         document.setType(file.getContentType());
         document.setContent(file.getBytes());
-        document.setVendor(vendorRepository.findVendorByrequestorEmail(currentUser.getEmail()));
-        System.out.println(document.getVendor());
 
         Vendor_Document savedDoc = documentRepository.save(document);
 
+        currentUser.setVendorDocument(document);
+
+        userRepository.save(currentUser);
 
         return ResponseEntity.ok("{\"message\": \"Files added successfully " + savedDoc.getFilename() + "\"}");
     }

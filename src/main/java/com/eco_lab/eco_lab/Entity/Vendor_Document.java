@@ -22,6 +22,4 @@ public class Vendor_Document {
     private String type;
     private byte[] content;
 
-    @DBRef
-    private Vendor vendor;
 }
